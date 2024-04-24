@@ -1,17 +1,4 @@
-export interface Record {
-  api_key_name?: string;
-  model: string;
-  n_context_tokens_total: string;
-  n_generated_tokens_total: string;
-  timestamp: string;
-}
-
-export interface UsageData {
-  [model: string]: number | string | number[];
-}
-export interface Usage {
-  [user: string]: UsageData[];
-}
+import { UsageData, Usage, Record } from './parseBasic';
 
 // Helper function to get the number of days in a month
 const daysInMonth = (year: number, month: number): number => new Date(year, month + 1, 0).getDate();
@@ -19,7 +6,7 @@ const daysInMonth = (year: number, month: number): number => new Date(year, mont
 // Helper function to generate model data structure for UsageData
 const generateModelDataForUsage = (models: string[]): UsageData =>
   models.reduce((accum, model) => {
-    accum[model] = [0,0];
+    accum[model] = [0, 0];
     return accum;
   }, { date: '' } as UsageData);
 
@@ -45,9 +32,9 @@ const parseCSV = (records: Record[], callback: (usageData: Usage, userNames: str
   }
 
   const userNames = Array.from(new Set(records.map(record => record.api_key_name || 'Playground')));
-userNames.push('AllUsers');
-const models = Array.from(new Set(records.flatMap(record => record.model)));
-models.push('AllModels');
+  userNames.push('AllUsers');
+  const models = Array.from(new Set(records.flatMap(record => record.model)));
+  models.push('AllModels');
   const tokensData: Usage = {};
   const usageData: Usage = {};
 
@@ -90,7 +77,7 @@ models.push('AllModels');
       usageData[userKey][dayKey]['AllModels'] = 0;
     });
   });
-  
+
   userNames.forEach(userKey => {
     tokensData[userKey].forEach((dayData, dayKey) => {
       for (const [modelName, counts] of Object.entries(dayData)) {

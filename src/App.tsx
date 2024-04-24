@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
-import { parseCSV, Record } from './parseCSV';
-import CustomBarChart from "./CustomBarChart"
+import { Record } from './parse/parseBasic';
+import { parseCSV } from './parse/parseCSV';
+import { parseJSON } from './parse/parseJSON';
+
+import CustomBarChart from "./chart/CustomBarChart"
 
 interface DateData {
   [key: string]: any;
@@ -24,6 +27,22 @@ const App: React.FC = () => {
   const [usageData, setUsageData] = useState<UserData>({});
   const [userNames, setUserNames] = useState<string[]>([]);
   const [models, setModels] = useState<string[]>([]);
+
+  useEffect(() => {
+    function handleMessage(event: any) {
+      const trustedOrigins = ['https://platform.openai.com'];
+      if (!trustedOrigins.includes(event.origin)) {
+        return;
+      }
+      console.log('Received message:', event.data);
+    }
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {

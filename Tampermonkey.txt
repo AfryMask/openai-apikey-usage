@@ -1,0 +1,95 @@
+// ==UserScript==
+// @name         openai-apikey-usage
+// @version      0.1
+// @description  Get OpenAI usage by apikey.
+// @author       AfryMask
+// @match        https://platform.openai.com/usage
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // ========== Button create ========== //
+
+	const button = document.createElement('button');
+	button.textContent = 'Goto APIKey usage';
+	button.style.marginLeft = 'auto';
+	button.style.fontFamily = '"Söhne", helvetica, sans-serif';
+	button.style.border = 'none';
+	button.style.borderRadius = '8px';
+	button.style.boxSizing = 'border-box';
+	button.style.cursor = 'pointer';
+	button.style.display = 'inline-flex';
+	button.style.fontWeight = '500';
+	button.style.justifyContent = 'center';
+	button.style.position = 'relative';
+	button.style.transition = 'box-shadow 0.2s, background-color 0.2s, color 0.2s, border 0.2s';
+	button.style.fontSize = '14px';
+	button.style.height = '32px';
+	button.style.lineHeight = '20px';
+	button.style.padding = '6px 12px';
+	button.style.backgroundColor = '#b8b8b8';
+    button.style.color = '#f7f7f8';
+
+    // ========== Button add ========== //
+
+    const observer = new MutationObserver((mutations, obs) => {
+        const targetSpan = document.querySelector('span.usage-title-has-tooltip');
+        if (targetSpan) {
+            obs.disconnect();
+            const container = targetSpan.parentElement;
+            container.style.display = 'flex';
+            container.style.alignItems = 'center';
+            container.appendChild(button);
+        }
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // ========== Script ========== //
+
+    var code = `(function () {
+    const nativeFetch = window.fetch;
+    window.fetch = function () {
+        return nativeFetch.apply(this, arguments).then(async response => {
+            const clonedResponse = response.clone();
+            try {
+                const data = await clonedResponse.json();
+                document.dispatchEvent(new CustomEvent('responseOfFetch', { detail: { url: response.url, data: data } }));
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+            }
+            return response;
+        });
+    };
+})();`;
+    var blob = new Blob([code], {type: 'application/javascript'});
+    var scriptURL = URL.createObjectURL(blob);
+
+    var s = document.createElement('script');
+    s.src = scriptURL;
+    s.onload = function() {
+        this.remove();
+    };
+    (document.head || document.documentElement).appendChild(s);
+
+    // ========== Got results ========== //
+
+    document.addEventListener('responseOfFetch', function (e) {
+        if (e.detail.url.includes("https://api.openai.com/v1/dashboard/activity")) {
+            console.log('Received:', e.detail.url);
+            console.log('Received:', e.detail.data);
+
+            button.style.backgroundColor = '#6cd468';
+            button.onclick = function() {
+                var targetWindow = window.open('http://localhost:3000/');
+                setTimeout(() => {
+                    targetWindow.postMessage(e.detail, 'http://localhost:3000/');
+                }, 1000);
+            };
+        }
+    });
+
+})();
