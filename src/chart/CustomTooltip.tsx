@@ -13,7 +13,7 @@ const CustomTooltip = ({
       <div className="usage-custom-tooltip">
         <div className="tooltip-item">
           <span className="tooltip-header-legend">{label}</span>
-          <span className="tooltip-header-value">{totalValue===0 ? '$0.00' :(totalValue<0.01 ? '<$0.01' : `$${totalValue.toFixed(2)}`)}</span>
+          <span className="tooltip-header-value">{totalValue === 0 ? '$0.00' : (totalValue < 0.01 ? '<$0.01' : `$${totalValue.toFixed(2)}`)}</span>
         </div>
         {payload.map((entry, index) => (
           entry.value > 0 && (

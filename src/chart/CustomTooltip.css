@@ -1,44 +1,43 @@
 .usage-custom-tooltip {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    font-size: 12px;
-    font-family: "SÃ¶hne", helvetica, sans-serif;
-  }
-  
-  .tooltip-item {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 4px;
-  }
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  font-family: "SÃ¶hne", helvetica, sans-serif;
+}
 
-  .tooltip-header-legend {
-    color: #353740;
-    font-weight: bold;
-    margin-right: 16px;
-  }
-  
-  .tooltip-header-value {
-    color: #353740;
-    font-weight: bold;
-    margin-left: auto;
-  }
-  
-  .tooltip-item-legend-color {
-    height: 10px;
-    width: 10px;
-    display: inline-block;
-    margin-right: 5px;
-  }
-  
-  .tooltip-item-legend {
-    margin-right: 16px;
-    color: #8e8ea0;
-  }
-  
-  .tooltip-item-value {
-    margin-left: auto;
-  }
-  
+.tooltip-item {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.tooltip-header-legend {
+  color: #353740;
+  font-weight: bold;
+  margin-right: 16px;
+}
+
+.tooltip-header-value {
+  color: #353740;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.tooltip-item-legend-color {
+  height: 10px;
+  width: 10px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.tooltip-item-legend {
+  margin-right: 16px;
+  color: #8e8ea0;
+}
+
+.tooltip-item-value {
+  margin-left: auto;
+}

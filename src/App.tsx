@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
-import { Record } from './parse/parseBasic';
-import { parseCSV } from './parse/parseCSV';
-import { parseJSON } from './parse/parseJSON';
-
+import { parseActivity } from './tools/parseActivity';
 import CustomBarChart from "./chart/CustomBarChart"
 
 interface DateData {
@@ -35,6 +32,12 @@ const App: React.FC = () => {
         return;
       }
       console.log('Received message:', event.data);
+      parseActivity(event.data.data.data, 'json', (usageData, userNames, models) => {
+        console.log('final results:', usageData);
+        setUsageData(usageData);
+        setUserNames(userNames);
+        setModels(models);
+      });
     }
 
     window.addEventListener('message', handleMessage);
@@ -50,8 +53,7 @@ const App: React.FC = () => {
       Papa.parse(file, {
         header: true,
         complete: (results: any) => {
-          const records: Record[] = results.data;
-          parseCSV(records, (usageData, userNames, models) => {
+          parseActivity(results.data, 'csv', (usageData, userNames, models) => {
             console.log('final results:', usageData);
             setUsageData(usageData);
             setUserNames(userNames);
