@@ -148,7 +148,9 @@ export const parseActivity = (originData: any, type: string, callback: (usageDat
                 const context = (counts as number[])[0] / 1000000;
                 const generated = (counts as number[])[1] / 1000000;
                 let price = 0;
-                if (modelName.includes('gpt-4') && (modelName.includes('vision') || modelName.includes('turbo') || modelName.includes('preview'))) {
+                if (modelName.includes('gpt-4o')) {
+                    price = 5 * context + 15 * generated;
+                }else if (modelName.includes('gpt-4') && (modelName.includes('vision') || modelName.includes('turbo') || modelName.includes('preview'))) {
                     price = 10 * context + 30 * generated;
                 } else if (modelName.includes('gpt-3.5') && (modelName.includes('vision') || modelName.includes('turbo') || modelName.includes('preview'))) {
                     price = 0.5 * context + 1.5 * generated;
